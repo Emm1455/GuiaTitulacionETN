@@ -1,6 +1,8 @@
 import { Box, Typography, TextField, Button, Link } from "@mui/material/";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import successAlert from "../alerts/successAlert";
+import errorAlert from "../alerts/errorAlert";
 
 function LoginForm() {
   const [email, SetEmail] = useState("");
@@ -10,10 +12,17 @@ function LoginForm() {
   const handleSubmit = function () {
     postData(`${URI}/login`, { email: email, password: password }).then(
       (data) => {
-        if (data.msg === "Logged correctly") {
-          navigate("/");
+        if (data.message === "Loggeado correctamente") {
+          sessionStorage.setItem('name' ,data.body.name);
+          sessionStorage.setItem('token',data.body.token);
+          sessionStorage.setItem('rol'  ,data.body.rol)
+          successAlert(`Bienvenido ${data.body.name}`)
+          setTimeout(()=>{
+            navigate("/");
+          },3000)
+          
         } else {
-          alert("something went wrong, try again");
+          errorAlert(`${data.message}: ${data.body.error}`)
         }
       }
     );
