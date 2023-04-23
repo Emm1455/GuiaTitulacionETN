@@ -3,26 +3,25 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import successAlert from "../alerts/successAlert";
 import errorAlert from "../alerts/errorAlert";
+import { URI } from "../utils/connectionData";
 
 function LoginForm() {
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
   const navigate = useNavigate();
-  const URI = "https://guia-titulacion-etn-api.vercel.app/api";
   const handleSubmit = function () {
     postData(`${URI}/login`, { email: email, password: password }).then(
       (data) => {
         if (data.message === "Loggeado correctamente") {
-          sessionStorage.setItem('name' ,data.body.name);
-          sessionStorage.setItem('token',data.body.token);
-          sessionStorage.setItem('rol'  ,data.body.rol)
-          successAlert(`Bienvenido ${data.body.name}`)
-          setTimeout(()=>{
+          sessionStorage.setItem("name", data.body.name);
+          sessionStorage.setItem("token", data.body.token);
+          sessionStorage.setItem("rol", data.body.rol);
+          successAlert(`Bienvenido ${data.body.name}`);
+          setTimeout(() => {
             navigate("/");
-          },3000)
-          
+          }, 1000);
         } else {
-          errorAlert(`${data.message}: ${data.body.error}`)
+          errorAlert(`${data.message}: ${data.body.error}`);
         }
       }
     );

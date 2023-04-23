@@ -1,48 +1,37 @@
 import { IconButton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
+import { URI } from "../utils/connectionData";
+import { useEffect, useState } from "react";
 
 function StageProfile() {
+  const [data, SetData] = useState();
+
   const handleNext = function () {
     navigate("/stage-project");
   };
 
-  const navigate = useNavigate();
-  const data = {
-    title: "Preparación de perfil",
-    requirements: "Haber aprobado 40 materias de carrera ~ 8vo semestre",
-    name: "profile",
-    notes: [
-      "A partir del momento de registro del perfil se tienen 4 semestres para terminar el proyecto de grado, posterior a eso se debe elegir otro tema y reiniciar el trámite.",
-    ],
-    data: [
-      {
-        type: "Academic",
-        text: "Inscripción en la materia",
-        content: [
-          "Ingresar al sistema académico",
-          "Elegir la opción de inscripción",
-          "Ingresar nombre de tutor y ...",
-        ],
-        place: "http://sisacademico.umsa.edu.bo/mi/",
-        duration: "2 a 5 días",
-        number: "1",
-        _id: 10,
-      },
-      {
-        type: "Paperwork",
-        text: "Preparar perfil de proyecto de grado con guía del tutor",
-        content: [],
-        place: "Kardex",
-        duration: "2 a 5 días",
-        number: "2",
-        _id: 11,
-      },
-    ],
+  const handlePrevious = function () {
+    navigate("/stage-project");
   };
 
-  const draw = data.data.map((item) => <li key={item._id}>{item.text}</li>);
+  async function GetData(url) {
+    const response = await fetch(`${url}/stage?name=profile`);
+    const result = await response.json();
+    return result;
+  }
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    GetData(URI)
+      .then((result) => SetData(result))
+      .catch((error) => console.log(`error loading data: ${error}`));
+  }, []);
+
+  const draw = data?.data.map((item) => <li key={item._id}>{item.text}</li>);
   return (
     <Box
       sx={{
@@ -54,21 +43,33 @@ function StageProfile() {
         p: 2,
       }}
     >
-      <Typography variant="h4">{data.title}</Typography>
+      <Typography variant="h4">{data?.title}</Typography>
       <Typography variant="h6">Requisitos</Typography>
-      <Typography variant="body2">{data.requirements}</Typography>
+      <Typography variant="body2">{data?.requirements}</Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <ol>{draw}</ol>
       </Box>
-      <Typography variant="body2">{data.notes[0]}</Typography>
-      <IconButton
-        onClick={() => handleNext()}
-        color="primary"
-        aria-label="next"
-        component="button"
+      <Typography variant="body2">{data?.notes[0]}</Typography>
+      <Box
+        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
       >
-        <ArrowForwardIcon />
-      </IconButton>
+        <IconButton
+          onClick={() => handlePrevious()}
+          color="primary"
+          aria-label="next"
+          component="button"
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => handleNext()}
+          color="primary"
+          aria-label="next"
+          component="button"
+        >
+          <ArrowForwardIcon />
+        </IconButton>
+      </Box>
     </Box>
   );
 }
