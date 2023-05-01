@@ -12,7 +12,7 @@ function LoginForm() {
   const handleSubmit = function () {
     postData(`${URI}/login`, { email: email, password: password }).then(
       (data) => {
-        if (data.message === "Loggeado correctamente") {
+        if (data.message === "Logueado correctamente") {
           sessionStorage.setItem("name", data.body.name);
           sessionStorage.setItem("token", data.body.token);
           sessionStorage.setItem("rol", data.body.rol);
@@ -91,7 +91,7 @@ function LoginForm() {
         </Button>
         <Typography variant="body2">
           No tienes una cuenta?{" "}
-          <Link href="#" underline="hover">
+          <Link href="/sign-in" underline="hover">
             Registrate
           </Link>
         </Typography>

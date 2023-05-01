@@ -19,12 +19,15 @@ function Header() {
         alignItems: "center",
         color: "primary.contrastText",
         gap: 2,
-        p: 2,
+        p: 1.5,
       }}
     >
       <Button
         onClick={() => navigate("/")}
-        sx={{ textTransform: "none", color: "inherit" }}
+        sx={{
+          textTransform: "none",
+          color: "inherit",
+        }}
       >
         Home
       </Button>
@@ -44,16 +47,33 @@ function Header() {
           </Button>
         </Box>
       ) : (
-        <Button
-          onClick={() => navigate("/login")}
+        <Box
           sx={{
-            textTransform: "none",
-            backgroundColor: "info.main",
+            display: "flex",
+            gap: 2,
           }}
-          variant="contained"
         >
-          Login
-        </Button>
+          <Button
+            onClick={() => navigate("/login")}
+            color="info"
+            sx={{
+              textTransform: "none",
+            }}
+            variant="contained"
+          >
+            Log in
+          </Button>
+          <Button
+            onClick={() => navigate("/sign-in")}
+            color="success"
+            sx={{
+              textTransform: "none",
+            }}
+            variant="contained"
+          >
+            Sign in
+          </Button>
+        </Box>
       )}
     </Box>
   );
