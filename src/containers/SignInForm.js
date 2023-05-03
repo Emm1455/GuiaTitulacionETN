@@ -89,7 +89,7 @@ function LoginForm() {
     const userName = userNameGenerator(name, lastName);
     const data = {
       name: `${name} ${lastName}`,
-      userName: userName,
+      username: userName,
       email: email,
       professor: professor,
       tutor: tutor,
@@ -100,7 +100,8 @@ function LoginForm() {
     };
 
     postData(`${URI}/user`, { data }).then((data) => {
-      if (data.message === "add user desde controller") {
+      console.log(data);
+      if (data.message === "usuario registrado correctamente") {
         successAlert(`Bienvenido ${data.body.name}`);
         setTimeout(() => {
           navigate("/");

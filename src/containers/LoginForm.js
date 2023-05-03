@@ -12,7 +12,7 @@ function LoginForm() {
   const handleSubmit = function () {
     postData(`${URI}/login`, { email: email, password: password }).then(
       (data) => {
-        if (data.message === "Logueado correctamente") {
+        if (data.message === "Loggeado correctamente") {
           sessionStorage.setItem("name", data.body.name);
           sessionStorage.setItem("token", data.body.token);
           sessionStorage.setItem("rol", data.body.rol);
