@@ -91,7 +91,7 @@ function LoginForm() {
         </Button>
         <Typography variant="body2">
           No tienes una cuenta?{" "}
-          <Link href="#" underline="hover">
+          <Link href="/sign-in" underline="hover">
             Registrate
           </Link>
         </Typography>

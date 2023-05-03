@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "../pages/Header";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
+import SignIn from "../pages/SignIn";
 import PageNotFound from "../pages/PageNotFound";
 import StageProfile from "../pages/StageProfile";
 import StageProject from "../pages/StageProject";
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/sign-in" element={<SignIn />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/stage-profile" element={<StageProfile />} />
           <Route path="/stage-project" element={<StageProject />} />
@@ -40,3 +42,4 @@ function App() {
 }
 
 export default App;
+
