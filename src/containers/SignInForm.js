@@ -99,9 +99,10 @@ function LoginForm() {
       password: password,
     };
 
-    console.log({data});
-    console.log(`${URI}/user`);
-    //postData(`${URI}/user`, { data }).then((data) => {
+    // console.log({ data });
+    // console.log(`${URI}/user`);
+    // postData(`${URI}/user`, data)
+    // .then((data) => {
     //  console.log(data);
     //  if (data.message === "usuario registrado correctamente") {
     //    successAlert(`Bienvenido ${data.body.name}`);
@@ -111,20 +112,20 @@ function LoginForm() {
     //  } else {
     //    errorAlert(`${data.message}: ${data.body.error}`);
     //  }
-    //});
-    postData(`${URI}/user`,data)
-      .then(r=>{
+    // });
+    postData(`${URI}/user`, data)
+      .then((r) => {
         //console.log(r);
-        if(r.message==="usuario registrado correctamente"){
-          successAlert(`Bienvenido ${r.body.name}`)
-          setTimeout(()=>{
-            navigate("/")
-          },1000)
+        if (r.message === "usuario registrado correctamente") {
+          successAlert(`Bienvenido ${r.body.name}`);
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
         } else {
-          errorAlert(`${r.message}: ${r.body.error}`)
+          errorAlert(`${r.message}: ${r.body.error}`);
         }
       })
-      .catch(e=>console.log(e))
+      .catch((e) => console.log(e));
   };
 
   async function postData(url = "", data = {}) {
