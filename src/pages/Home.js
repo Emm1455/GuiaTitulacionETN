@@ -22,7 +22,7 @@ function Home() {
     <Box
       sx={{
         display: "flex",
-        height: "80vh",
+        flexGrow: 1,
         justifyContent: "center",
         alignItems: "flex-start",
         flexDirection: "column",

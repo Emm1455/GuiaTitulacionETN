@@ -1,13 +1,19 @@
-import { IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import { URI } from "../utils/connectionData";
 import { useEffect, useState } from "react";
+import StepsList from "../components/StepsList";
 
 function StageProfile() {
-  const [data, SetData] = useState();
+  const trajectory = JSON.parse(sessionStorage.getItem("profile"));
+  const userToken = sessionStorage.getItem("token");
+  const [data, SetData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [checked, setChecked] = useState(trajectory.steps);
+  const navigate = useNavigate();
 
   const handleNext = function () {
     navigate("/stage-project");
@@ -23,16 +29,36 @@ function StageProfile() {
     return result;
   }
 
-  const navigate = useNavigate();
+  async function putData(url = "", data = {}) {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "x-token": userToken },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
 
   useEffect(() => {
     GetData(URI)
-      .then((result) => SetData(result))
+      .then((result) => {
+        SetData(result);
+        setIsLoading(false);
+      })
       .catch((error) => console.log(`error loading data: ${error}`));
   }, []);
 
-  const draw = data?.data.map((item) => <li key={item._id}>{item.text}</li>);
-  return (
+  function handleTrajectory() {
+    putData(`${URI}/user/trajectory/${trajectory._id}`, {
+      steps: checked,
+    }).then((result) => {
+      setChecked(result.body.steps);
+      sessionStorage.setItem("profile", JSON.stringify(result.body));
+    });
+  }
+
+  return isLoading ? (
+    <></>
+  ) : (
     <Box
       sx={{
         display: "flex",
@@ -46,9 +72,11 @@ function StageProfile() {
       <Typography variant="h4">{data?.title}</Typography>
       <Typography variant="h6">Requisitos</Typography>
       <Typography variant="body2">{data?.requirements}</Typography>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      {/* <Box sx={{ display: "flex", flexDirection: "column" }}>
         <ol>{draw}</ol>
-      </Box>
+      </Box> */}
+      <StepsList data={data?.data} checked={checked} setChecked={setChecked} />
+      <Button onClick={handleTrajectory}>Registrar avance</Button>
       <Typography variant="body2">{data?.notes[0]}</Typography>
       <Box
         sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}

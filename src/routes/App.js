@@ -26,7 +26,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", flexShrink: 0 }}>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -42,4 +42,3 @@ function App() {
 }
 
 export default App;
-
