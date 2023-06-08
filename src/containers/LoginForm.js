@@ -16,6 +16,10 @@ function LoginForm() {
           sessionStorage.setItem("name", data.body.name);
           sessionStorage.setItem("token", data.body.token);
           sessionStorage.setItem("rol", data.body.rol);
+          sessionStorage.setItem(
+            "profile",
+            JSON.stringify(data.body.trajectory[0])
+          );
           successAlert(`Bienvenido ${data.body.name}`);
           setTimeout(() => {
             navigate("/");

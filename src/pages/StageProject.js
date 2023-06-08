@@ -5,9 +5,13 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import { URI } from "../utils/connectionData";
 import { useEffect, useState } from "react";
+import StepsList from "../components/StepsList";
 
 function StageProject() {
   const [data, SetData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [checked, setChecked] = useState([0]);
+  const navigate = useNavigate();
 
   const handleNext = function () {
     navigate("/stage-project");
@@ -23,16 +27,19 @@ function StageProject() {
     return result;
   }
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     GetData(URI)
-      .then((result) => SetData(result))
+      .then((result) => {
+        SetData(result);
+        setIsLoading(false);
+      })
       .catch((error) => console.log(`error loading data: ${error}`));
   }, []);
 
-  const draw = data?.data.map((item) => <li key={item._id}>{item.text}</li>);
-  return (
+  // const draw = data?.data.map((item) => <li key={item._id}>{item.text}</li>);
+  return isLoading ? (
+    <></>
+  ) : (
     <Box
       sx={{
         display: "flex",
@@ -46,9 +53,10 @@ function StageProject() {
       <Typography variant="h4">{data?.title}</Typography>
       <Typography variant="h6">Requisitos</Typography>
       <Typography variant="body2">{data?.requirements}</Typography>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      {/* <Box sx={{ display: "flex", flexDirection: "column" }}>
         <ol>{draw}</ol>
-      </Box>
+      </Box> */}
+      <StepsList data={data?.data} checked={checked} setChecked={setChecked} />
       <Typography variant="body2">{data?.notes[0]}</Typography>
       <Box
         sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
