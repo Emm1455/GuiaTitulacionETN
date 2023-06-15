@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { URI } from "../utils/connectionData";
 import { useEffect, useState } from "react";
 import StepsList from "../components/StepsList";
+import SimpleList from "../components/SimpleList";
 
 function StageProfile() {
   const trajectory = JSON.parse(sessionStorage.getItem("profile"));
   const userToken = sessionStorage.getItem("token");
   const [data, SetData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [checked, setChecked] = useState(trajectory.steps);
+  const [checked, setChecked] = useState(trajectory ? trajectory.steps : []);
   const navigate = useNavigate();
 
   const handleNext = function () {
@@ -72,10 +73,15 @@ function StageProfile() {
       <Typography variant="h4">{data?.title}</Typography>
       <Typography variant="h6">Requisitos</Typography>
       <Typography variant="body2">{data?.requirements}</Typography>
-      {/* <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <ol>{draw}</ol>
-      </Box> */}
-      <StepsList data={data?.data} checked={checked} setChecked={setChecked} />
+      {userToken ? (
+        <StepsList
+          data={data?.data}
+          checked={checked}
+          setChecked={setChecked}
+        />
+      ) : (
+        <SimpleList data={data?.data} />
+      )}
       <Button onClick={handleTrajectory}>Registrar avance</Button>
       <Typography variant="body2">{data?.notes[0]}</Typography>
       <Box

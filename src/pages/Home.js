@@ -18,6 +18,10 @@ function Home() {
   function handleProfile() {
     navigate("/stage-profile");
   }
+
+  function handleProject() {
+    navigate("/stage-project");
+  }
   return (
     <Box
       sx={{
@@ -55,7 +59,7 @@ function Home() {
             Preparación de perfil
           </TimelineContent>
         </TimelineItem>
-        <TimelineItem sx={{ cursor: "pointer" }}>
+        <TimelineItem onClick={handleProject} sx={{ cursor: "pointer" }}>
           <TimelineSeparator>
             <TimelineDot variant="outlined" color="primary">
               <img
