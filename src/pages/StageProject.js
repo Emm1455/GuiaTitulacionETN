@@ -1,4 +1,4 @@
-import { IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -6,11 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { URI } from "../utils/connectionData";
 import { useEffect, useState } from "react";
 import StepsList from "../components/StepsList";
+import SimpleList from "../components/SimpleList";
 
 function StageProject() {
+  const trajectory = JSON.parse(sessionStorage.getItem("project"));
+  const userToken = sessionStorage.getItem("token");
   const [data, SetData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [checked, setChecked] = useState([0]);
+  const [checked, setChecked] = useState(trajectory ? trajectory.steps : []);
   const navigate = useNavigate();
 
   const handleNext = function () {
@@ -27,6 +30,15 @@ function StageProject() {
     return result;
   }
 
+  async function putData(url = "", data = {}) {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "x-token": userToken },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
+
   useEffect(() => {
     GetData(URI)
       .then((result) => {
@@ -36,7 +48,15 @@ function StageProject() {
       .catch((error) => console.log(`error loading data: ${error}`));
   }, []);
 
-  // const draw = data?.data.map((item) => <li key={item._id}>{item.text}</li>);
+  function handleTrajectory() {
+    putData(`${URI}/user/trajectory/${trajectory._id}`, {
+      steps: checked,
+    }).then((result) => {
+      setChecked(result.body.steps);
+      sessionStorage.setItem("project", JSON.stringify(result.body));
+    });
+  }
+
   return isLoading ? (
     <></>
   ) : (
@@ -53,10 +73,16 @@ function StageProject() {
       <Typography variant="h4">{data?.title}</Typography>
       <Typography variant="h6">Requisitos</Typography>
       <Typography variant="body2">{data?.requirements}</Typography>
-      {/* <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <ol>{draw}</ol>
-      </Box> */}
-      <StepsList data={data?.data} checked={checked} setChecked={setChecked} />
+      {userToken ? (
+        <StepsList
+          data={data?.data}
+          checked={checked}
+          setChecked={setChecked}
+        />
+      ) : (
+        <SimpleList data={data?.data} />
+      )}
+      <Button onClick={handleTrajectory}>Registrar avance</Button>
       <Typography variant="body2">{data?.notes[0]}</Typography>
       <Box
         sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}

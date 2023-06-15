@@ -20,6 +20,10 @@ function LoginForm() {
             "profile",
             JSON.stringify(data.body.trajectory[0])
           );
+          sessionStorage.setItem(
+            "project",
+            JSON.stringify(data.body.trajectory[1])
+          );
           successAlert(`Bienvenido ${data.body.name}`);
           setTimeout(() => {
             navigate("/");

@@ -2,7 +2,6 @@ import React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Checkbox } from "@mui/material";
 
@@ -33,15 +32,13 @@ function StepsList({ data, checked, setChecked }) {
           dense
           disableGutters
         >
-          <ListItemIcon>
-            <Checkbox
-              checked={checked.indexOf(value?.number) !== -1}
-              tabIndex={-1}
-              disableRipple
-              size="small"
-              inputProps={{ "aria-labelledby": labelId }}
-            />
-          </ListItemIcon>
+          <Checkbox
+            checked={checked.indexOf(value?.number) !== -1}
+            tabIndex={-1}
+            disableRipple
+            size="small"
+            inputProps={{ "aria-labelledby": labelId }}
+          />
           <ListItemText id={labelId} primary={value.text} />
         </ListItemButton>
       </ListItem>
