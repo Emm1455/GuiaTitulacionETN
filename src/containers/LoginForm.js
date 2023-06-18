@@ -3,14 +3,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import successAlert from "../alerts/successAlert";
 import errorAlert from "../alerts/errorAlert";
-import { URI } from "../utils/connectionData";
+import { URI } from "../api/connectionData";
 
 function LoginForm() {
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
   const navigate = useNavigate();
   const handleSubmit = function () {
-    postData(`${URI}/login`, { email: email, password: password }).then(
+    postData(`${URI}login`, { email: email, password: password }).then(
       (data) => {
         if (data.message === "Loggeado correctamente") {
           sessionStorage.setItem("name", data.body.name);

@@ -1,8 +1,6 @@
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
 import ProfileIcon from "../assets/profile.svg";
 import ProjectIcon from "../assets/project.svg";
-
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -15,13 +13,6 @@ import { useNavigate } from "react-router-dom";
 function Home() {
   const navigate = useNavigate();
 
-  function handleProfile() {
-    navigate("/stage-profile");
-  }
-
-  function handleProject() {
-    navigate("/stage-project");
-  }
   return (
     <Box
       sx={{
@@ -43,7 +34,10 @@ function Home() {
           gap: 1,
         }}
       >
-        <TimelineItem onClick={handleProfile} sx={{ cursor: "pointer" }}>
+        <TimelineItem
+          onClick={() => navigate("/stage-profile")}
+          sx={{ cursor: "pointer" }}
+        >
           <TimelineSeparator>
             <TimelineDot variant="outlined" color="success">
               <img
@@ -59,7 +53,10 @@ function Home() {
             Preparación de perfil
           </TimelineContent>
         </TimelineItem>
-        <TimelineItem onClick={handleProject} sx={{ cursor: "pointer" }}>
+        <TimelineItem
+          onClick={() => navigate("/stage-project")}
+          sx={{ cursor: "pointer" }}
+        >
           <TimelineSeparator>
             <TimelineDot variant="outlined" color="primary">
               <img
@@ -72,9 +69,7 @@ function Home() {
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent sx={{ paddingTop: "1rem" }}>
-            <Link color="#2D2D2D" href="/stage-profile" underline="none">
-              Proyecto de grado
-            </Link>
+            Proyecto de grado
           </TimelineContent>
         </TimelineItem>
       </Timeline>
