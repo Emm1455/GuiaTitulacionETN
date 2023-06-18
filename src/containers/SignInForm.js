@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import successAlert from "../alerts/successAlert";
 import errorAlert from "../alerts/errorAlert";
-import { URI } from "../utils/connectionData";
+import { URI } from "../api/connectionData";
 
 function LoginForm() {
   const [createDisabled, SetCreateDisabled] = useState(true);
@@ -113,7 +113,7 @@ function LoginForm() {
     //    errorAlert(`${data.message}: ${data.body.error}`);
     //  }
     // });
-    postData(`${URI}/user`, data)
+    postData(`${URI}user`, data)
       .then((r) => {
         //console.log(r);
         if (r.message === "usuario registrado correctamente") {

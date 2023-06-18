@@ -3,18 +3,36 @@ import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
-import { URI } from "../utils/connectionData";
 import { useEffect, useState } from "react";
 import StepsList from "../components/StepsList";
 import SimpleList from "../components/SimpleList";
+import useRequest from "../hooks/useRequest";
+import { endpoints } from "../api/connectionData";
 
 function StageProfile() {
   const trajectory = JSON.parse(sessionStorage.getItem("profile"));
   const userToken = sessionStorage.getItem("token");
-  const [data, SetData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [checked, setChecked] = useState(trajectory ? trajectory.steps : []);
   const navigate = useNavigate();
+  const [getPageRes, getPageLoading, getPageRequest] = useRequest(
+    endpoints.stageProfile,
+    "GET",
+    false
+  );
+  const [putTrajectoryRes, putTrajectoryLoading, putTrajectoryRequest] =
+    useRequest(endpoints.trajectory + trajectory?._id, "PUT", true);
+
+  useEffect(() => {
+    getPageRequest();
+  }, []);
+
+  function handleTrajectory() {
+    putTrajectoryRequest({ steps: checked });
+    if (!putTrajectoryLoading) {
+      setChecked(putTrajectoryRes.body.steps);
+      sessionStorage.setItem("profile", JSON.stringify(putTrajectoryRes.body));
+    }
+  }
 
   const handleNext = function () {
     navigate("/stage-project");
@@ -24,40 +42,7 @@ function StageProfile() {
     navigate("/stage-project");
   };
 
-  async function GetData(url) {
-    const response = await fetch(`${url}/stage?name=profile`);
-    const result = await response.json();
-    return result;
-  }
-
-  async function putData(url = "", data = {}) {
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-token": userToken },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  }
-
-  useEffect(() => {
-    GetData(URI)
-      .then((result) => {
-        SetData(result);
-        setIsLoading(false);
-      })
-      .catch((error) => console.log(`error loading data: ${error}`));
-  }, []);
-
-  function handleTrajectory() {
-    putData(`${URI}/user/trajectory/${trajectory._id}`, {
-      steps: checked,
-    }).then((result) => {
-      setChecked(result.body.steps);
-      sessionStorage.setItem("profile", JSON.stringify(result.body));
-    });
-  }
-
-  return isLoading ? (
+  return getPageLoading ? (
     <></>
   ) : (
     <Box
@@ -70,20 +55,22 @@ function StageProfile() {
         p: 2,
       }}
     >
-      <Typography variant="h4">{data?.title}</Typography>
+      <Typography variant="h4">{getPageRes.title}</Typography>
       <Typography variant="h6">Requisitos</Typography>
-      <Typography variant="body2">{data?.requirements}</Typography>
+      <Typography variant="body2">{getPageRes.requirements}</Typography>
       {userToken ? (
-        <StepsList
-          data={data?.data}
-          checked={checked}
-          setChecked={setChecked}
-        />
+        <>
+          <StepsList
+            data={getPageRes.data}
+            checked={checked}
+            setChecked={setChecked}
+          />
+          <Button onClick={handleTrajectory}>Registrar avance</Button>
+        </>
       ) : (
-        <SimpleList data={data?.data} />
+        <SimpleList data={getPageRes.data} />
       )}
-      <Button onClick={handleTrajectory}>Registrar avance</Button>
-      <Typography variant="body2">{data?.notes[0]}</Typography>
+      <Typography variant="body2">{getPageRes.notes[0]}</Typography>
       <Box
         sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
       >

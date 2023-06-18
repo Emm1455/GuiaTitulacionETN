@@ -10,12 +10,7 @@ function SimpleList({ data }) {
 
     return (
       <ListItem key={value.number} disablePadding>
-        <ListItemButton
-          role={undefined}
-          // onClick={() => handleToggle(value.number)}
-          dense
-          disableGutters
-        >
+        <ListItemButton role={undefined} dense disableGutters>
           <ListItemText
             id={labelId}
             primary={`${value.number}. ${value.text}`}

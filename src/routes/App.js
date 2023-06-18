@@ -32,9 +32,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sign-in" element={<SignIn />} />
-          <Route path="*" element={<PageNotFound />} />
           <Route path="/stage-profile" element={<StageProfile />} />
           <Route path="/stage-project" element={<StageProject />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Box>
     </ThemeProvider>
