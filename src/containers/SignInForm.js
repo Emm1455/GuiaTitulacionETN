@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import successAlert from "../alerts/successAlert";
 import errorAlert from "../alerts/errorAlert";
-import { URI } from "../api/connectionData";
+import { endpoints } from "../api/connectionData";
+import useRequest from "../hooks/useRequest";
 
 function LoginForm() {
   const [createDisabled, SetCreateDisabled] = useState(true);
@@ -25,6 +26,8 @@ function LoginForm() {
   const [court, SetCourt] = useState(["", ""]);
   const [passwordError, SetPasswordError] = useState("");
   const [emailError, SetEmailError] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
 
   const professors = [
     {
@@ -85,6 +88,25 @@ function LoginForm() {
 
   const navigate = useNavigate();
 
+  // eslint-disable-next-line no-unused-vars
+  const [resSignIn, loadingSignIn, sendReqSignIn] = useRequest(
+    endpoints.user,
+    "POST",
+    false,
+    handleSignIn
+  );
+
+  function handleSignIn(res) {
+    if (res.message === "usuario registrado correctamente") {
+      successAlert(`Bienvenido ${res.body.name}`);
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } else {
+      errorAlert(`${res.message}: ${res.body.error}`);
+    }
+  }
+
   const handleSubmit = function () {
     const userName = userNameGenerator(name, lastName);
     const data = {
@@ -99,43 +121,8 @@ function LoginForm() {
       password: password,
     };
 
-    // console.log({ data });
-    // console.log(`${URI}/user`);
-    // postData(`${URI}/user`, data)
-    // .then((data) => {
-    //  console.log(data);
-    //  if (data.message === "usuario registrado correctamente") {
-    //    successAlert(`Bienvenido ${data.body.name}`);
-    //    setTimeout(() => {
-    //      navigate("/");
-    //    }, 1000);
-    //  } else {
-    //    errorAlert(`${data.message}: ${data.body.error}`);
-    //  }
-    // });
-    postData(`${URI}user`, data)
-      .then((r) => {
-        //console.log(r);
-        if (r.message === "usuario registrado correctamente") {
-          successAlert(`Bienvenido ${r.body.name}`);
-          setTimeout(() => {
-            navigate("/");
-          }, 1000);
-        } else {
-          errorAlert(`${r.message}: ${r.body.error}`);
-        }
-      })
-      .catch((e) => console.log(e));
+    sendReqSignIn(data);
   };
-
-  async function postData(url = "", data = {}) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  }
 
   function userNameGenerator(name, lastName) {
     const nameArray = name.split(" ");
@@ -151,24 +138,31 @@ function LoginForm() {
   }
 
   useEffect(() => {
-    if (name !== "" && lastName !== "" && professor !== "" && mention !== "")
+    if (
+      name !== "" &&
+      lastName !== "" &&
+      professor !== "" &&
+      mention !== "" &&
+      validPassword &&
+      validEmail
+    )
       SetCreateDisabled(false);
     else SetCreateDisabled(true);
-  }, [name, lastName, professor, mention]);
+  }, [name, lastName, professor, mention, validPassword, validEmail]);
 
   function handlePassword(event) {
     const value = event.target.value;
-    const regex = /(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,})$/;
+    const regex = /^(?!^[0-9]*$)(?!^[a-zA-ZñÑ_]*$)(?=.*[a-zA-Z0-9ñÑ_]).{8,}$/;
     SetPassword(value);
     if (value === "") {
-      SetCreateDisabled(true);
+      setValidPassword(false);
       SetPasswordError("Este campo no puede estar vacio");
     } else {
       if (!regex.test(value)) {
         SetPasswordError("Utiliza números, letras y 8 caracteres mínimo");
-        SetCreateDisabled(true);
+        setValidPassword(false);
       } else {
-        SetCreateDisabled(false);
+        setValidPassword(true);
         SetPasswordError("");
       }
     }
@@ -179,14 +173,14 @@ function LoginForm() {
     const regex = /[\w-.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
     SetEmail(value);
     if (value === "") {
-      SetCreateDisabled(true);
+      setValidEmail(false);
       SetEmailError("Este campo no puede estar vacio");
     } else {
       if (!regex.test(value)) {
         SetEmailError("Ingresa un email válido");
-        SetCreateDisabled(true);
+        setValidEmail(false);
       } else {
-        SetCreateDisabled(false);
+        setValidEmail(true);
         SetEmailError("");
       }
     }
@@ -405,7 +399,7 @@ function LoginForm() {
           Cancelar
         </Button>
         <Button
-          disabled={createDisabled}
+          disabled={createDisabled || loadingSignIn === "requesting"}
           onClick={() => handleSubmit()}
           variant="contained"
           sx={{ textTransform: "none", width: 150 }}
