@@ -1,4 +1,4 @@
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Typography, Snackbar, Alert } from "@mui/material";
 import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -13,14 +13,21 @@ function StageProfile() {
   const trajectory = JSON.parse(sessionStorage.getItem("profile"));
   const userToken = sessionStorage.getItem("token");
   const [checked, setChecked] = useState(trajectory ? trajectory.steps : []);
+  const [popUpMessage, setPopUpMessage] = useState(false);
   const navigate = useNavigate();
   const [getPageRes, getPageLoading, getPageRequest] = useRequest(
     endpoints.stageProfile,
     "GET",
-    false
+    false,
+    () => {}
   );
   const [putTrajectoryRes, putTrajectoryLoading, putTrajectoryRequest] =
-    useRequest(endpoints.trajectory + trajectory?._id, "PUT", true);
+    useRequest(
+      endpoints.trajectory + trajectory?._id,
+      "PUT",
+      true,
+      handleTrajectoryResponse
+    );
 
   useEffect(() => {
     getPageRequest();
@@ -28,10 +35,11 @@ function StageProfile() {
 
   function handleTrajectory() {
     putTrajectoryRequest({ steps: checked });
-    if (!putTrajectoryLoading) {
-      setChecked(putTrajectoryRes.body.steps);
-      sessionStorage.setItem("profile", JSON.stringify(putTrajectoryRes.body));
-    }
+  }
+
+  function handleTrajectoryResponse(res) {
+    sessionStorage.setItem("profile", JSON.stringify(res.body));
+    setPopUpMessage(true);
   }
 
   const handleNext = function () {
@@ -42,9 +50,14 @@ function StageProfile() {
     navigate("/stage-project");
   };
 
-  return getPageLoading ? (
-    <></>
-  ) : (
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setPopUpMessage(false);
+  };
+
+  return getPageLoading === "requested" ? (
     <Box
       sx={{
         display: "flex",
@@ -65,12 +78,17 @@ function StageProfile() {
             checked={checked}
             setChecked={setChecked}
           />
-          <Button onClick={handleTrajectory}>Registrar avance</Button>
+          <Button
+            onClick={handleTrajectory}
+            disabled={putTrajectoryLoading === "requesting"}
+          >
+            Registrar avance
+          </Button>
         </>
       ) : (
         <SimpleList data={getPageRes.data} />
       )}
-      <Typography variant="body2">{getPageRes.notes[0]}</Typography>
+      <Typography variant="body2">{getPageRes?.notes[0]}</Typography>
       <Box
         sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
       >
@@ -91,7 +109,24 @@ function StageProfile() {
           <ArrowForwardIcon />
         </IconButton>
       </Box>
+      <Snackbar
+        open={popUpMessage}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {putTrajectoryRes.message}
+        </Alert>
+      </Snackbar>
     </Box>
+  ) : (
+    <></>
   );
 }
 

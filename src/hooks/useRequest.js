@@ -2,18 +2,24 @@ import { useState } from "react";
 import fetchData from "../api/fetchData";
 import { URI } from "../api/connectionData";
 
-export default function useRequest(endpoint, method, hasToken) {
+export default function useRequest(
+  endpoint,
+  method,
+  hasToken,
+  responseHandler
+) {
   const url = URI + endpoint;
   const [response, setResponse] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState("");
 
   function sendRequest(data = null) {
     let config = requestBuilder(method, data, hasToken);
-    setIsLoading(true);
+    setIsLoading("requesting");
     fetchData(url, config)
       .then((res) => {
         setResponse(res);
-        setIsLoading(false);
+        setIsLoading("requested");
+        responseHandler(res);
       })
       .catch((error) => console.log(`error loading data: ${error}`));
   }

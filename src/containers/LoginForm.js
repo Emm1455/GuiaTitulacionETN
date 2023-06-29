@@ -1,48 +1,37 @@
 import { Box, Typography, TextField, Button, Link } from "@mui/material/";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import successAlert from "../alerts/successAlert";
 import errorAlert from "../alerts/errorAlert";
-import { URI } from "../api/connectionData";
+import { endpoints } from "../api/connectionData";
+import useRequest from "../hooks/useRequest";
 
 function LoginForm() {
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = function () {
-    postData(`${URI}login`, { email: email, password: password }).then(
-      (data) => {
-        if (data.message === "Loggeado correctamente") {
-          sessionStorage.setItem("name", data.body.name);
-          sessionStorage.setItem("token", data.body.token);
-          sessionStorage.setItem("rol", data.body.rol);
-          sessionStorage.setItem(
-            "profile",
-            JSON.stringify(data.body.trajectory[0])
-          );
-          sessionStorage.setItem(
-            "project",
-            JSON.stringify(data.body.trajectory[1])
-          );
-          successAlert(`Bienvenido ${data.body.name}`);
-          setTimeout(() => {
-            navigate("/");
-          }, 1000);
-        } else {
-          errorAlert(`${data.message}: ${data.body.error}`);
-        }
-      }
-    );
-  };
+  const [resLogin, loadingLogin, sendReqLogin] = useRequest(
+    endpoints.login,
+    "POST",
+    false,
+    handleLogin
+  );
 
-  async function postData(url = "", data = {}) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    return response.json();
+  function handleLogin(res) {
+    if (res.message === "Loggeado correctamente") {
+      sessionStorage.setItem("name", res.body.name);
+      sessionStorage.setItem("token", res.body.token);
+      sessionStorage.setItem("rol", res.body.rol);
+      sessionStorage.setItem("profile", JSON.stringify(res.body.trajectory[0]));
+      sessionStorage.setItem("project", JSON.stringify(res.body.trajectory[1]));
+      navigate("/");
+    } else {
+      errorAlert(`${res.message}: ${res.body.error}`);
+    }
   }
+
+  const handleSubmit = function () {
+    sendReqLogin({ email: email, password: password });
+  };
 
   return (
     <Box
@@ -78,6 +67,9 @@ function LoginForm() {
         size="small"
         type="password"
         value={password}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleSubmit();
+        }}
         onChange={(e) => {
           SetPassword(e.target.value);
         }}
@@ -92,6 +84,7 @@ function LoginForm() {
       >
         <Button
           onClick={() => handleSubmit()}
+          disabled={loadingLogin === "requesting"}
           variant="contained"
           sx={{ textTransform: "none", width: 150 }}
         >
