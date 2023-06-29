@@ -9,6 +9,7 @@ function LoginForm() {
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [resLogin, loadingLogin, sendReqLogin] = useRequest(
     endpoints.login,
     "POST",
