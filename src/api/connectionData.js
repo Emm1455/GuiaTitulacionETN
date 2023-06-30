@@ -6,4 +6,5 @@ export const endpoints = {
   trajectory: "user/trajectory/",
   login: "login",
   user: "user",
+  suggestions: "suggestions",
 };

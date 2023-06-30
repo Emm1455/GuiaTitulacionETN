@@ -1,78 +1,88 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
-import ProfileIcon from "../assets/profile.svg";
-import ProjectIcon from "../assets/project.svg";
-import Timeline from "@mui/lab/Timeline";
-import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
-import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
-
-import { useNavigate } from "react-router-dom";
+import { Fab } from "@mui/material";
+import ReviewsIcon from "@mui/icons-material/Reviews";
+import StagesTimeLine from "../containers/StagesTimeLine";
+import SuggestionsDialog from "../components/SuggestionsDialog";
+import useRequest from "../hooks/useRequest";
+import { endpoints } from "../api/connectionData";
+import errorAlert from "../alerts/errorAlert";
 
 function Home() {
-  const navigate = useNavigate();
+  const userToken = sessionStorage.getItem("token");
+  const [dialogState, setDialogState] = useState(false);
+  const [suggestion, setSuggestion] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [resSug, loadingSug, sendSug] = useRequest(
+    endpoints.suggestions,
+    "POST",
+    true,
+    handleSug
+  );
+  const handleClickOpen = () => {
+    setDialogState(true);
+  };
+  const handleClose = () => {
+    setDialogState(false);
+    setSuggestion("");
+  };
+
+  const handleSubmit = (suggestion) => {
+    sendSug({ suggestion });
+  };
+
+  function handleSug(res) {
+    if (res.message === "Sugerencia guardada correctamente") {
+      setDialogState(false);
+      setSuggestion("");
+    } else {
+      errorAlert(`${res.message}: ${res.body.error}`);
+    }
+  }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexGrow: 1,
-        justifyContent: "center",
-        alignItems: "flex-start",
-        flexDirection: "column",
-        p: 2,
-        gap: 2,
-      }}
-    >
-      <Timeline
+    <Box sx={{ display: "flex", flex: 1 }}>
+      <StagesTimeLine />
+      {/* TO-DO: Add summary section
+      <Box
         sx={{
-          [`& .${timelineItemClasses.root}:before`]: {
-            flex: 0,
-            padding: 0,
-          },
-          gap: 1,
+          display: "flex",
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <TimelineItem
-          onClick={() => navigate("/stage-profile")}
-          sx={{ cursor: "pointer" }}
-        >
-          <TimelineSeparator>
-            <TimelineDot variant="outlined" color="success">
-              <img
-                src={ProfileIcon}
-                alt="project icon"
-                height="20"
-                width="20"
-              />
-            </TimelineDot>
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent sx={{ paddingTop: "1rem" }}>
-            Preparación de perfil
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem
-          onClick={() => navigate("/stage-project")}
-          sx={{ cursor: "pointer" }}
-        >
-          <TimelineSeparator>
-            <TimelineDot variant="outlined" color="primary">
-              <img
-                src={ProjectIcon}
-                alt="project icon"
-                height="20"
-                width="20"
-              />
-            </TimelineDot>
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent sx={{ paddingTop: "1rem" }}>
-            Proyecto de grado
-          </TimelineContent>
-        </TimelineItem>
-      </Timeline>
+        <Typography variant="h5">Under construction</Typography>
+      </Box> */}
+      {userToken ? (
+        <>
+          <Fab
+            size="medium"
+            color="primary"
+            aria-label="suggestions"
+            variant="extended"
+            onClick={handleClickOpen}
+            sx={{
+              textTransform: "none",
+              position: "absolute",
+              bottom: "1rem",
+              right: "1rem",
+            }}
+          >
+            <ReviewsIcon sx={{ mr: 1 }} />
+            Sugerencias
+          </Fab>
+          <SuggestionsDialog
+            open={dialogState}
+            handleClose={handleClose}
+            handleSubmit={handleSubmit}
+            suggestion={suggestion}
+            setSuggestion={setSuggestion}
+          />
+        </>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }
