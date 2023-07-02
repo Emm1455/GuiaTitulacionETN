@@ -5,10 +5,8 @@ function Header() {
   const userName = sessionStorage.getItem("name");
   const navigate = useNavigate();
   const cerrarSesión = () => {
-    sessionStorage.setItem("name", "");
-    sessionStorage.setItem("token", "");
-    sessionStorage.setItem("rol", "");
-    navigate("/");
+    sessionStorage.clear();
+    navigate("/login");
   };
   return (
     <Box
