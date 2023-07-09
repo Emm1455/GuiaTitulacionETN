@@ -16,7 +16,7 @@ function NewPasswordForm() {
   let restoreToken = window.location.pathname.split("/")[2];
   // eslint-disable-next-line no-unused-vars
   const [resNewPassword, loadingNewPassword, sendNewPassword] = useRequest(
-    endpoints.NewPasswordPassword,
+    endpoints.restorePassword,
     "PUT",
     restoreToken,
     handleNewPassword
