@@ -4,7 +4,6 @@ import {
   TextField,
   Button,
   MenuItem,
-  Divider,
 } from "@mui/material/";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -92,7 +91,7 @@ function LoginForm() {
   const [resSignIn, loadingSignIn, sendReqSignIn] = useRequest(
     endpoints.user,
     "POST",
-    false,
+    "",
     handleSignIn
   );
 
@@ -187,18 +186,7 @@ function LoginForm() {
   }
 
   return (
-    <Box
-      component="form"
-      sx={{
-        width: 450,
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        justifyContent: "flex-start",
-        alignItems: "center",
-        border: "1px #d4d4d4 solid",
-      }}
+    <
     >
       <Typography variant="h6" sx={{ alignSelf: "flex-start" }}>
         Datos personales
@@ -262,7 +250,6 @@ function LoginForm() {
         helperText={passwordError ? passwordError : ""}
         onChange={handlePassword}
       />
-      <Divider variant="middle" />
       <Typography variant="h6" sx={{ alignSelf: "flex-start" }}>
         Datos académicos
       </Typography>
@@ -407,7 +394,7 @@ function LoginForm() {
           Crear cuenta
         </Button>
       </Box>
-    </Box>
+    </>
   );
 }
 

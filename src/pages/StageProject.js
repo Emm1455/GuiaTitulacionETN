@@ -18,14 +18,14 @@ function StageProject() {
   const [getPageRes, getPageLoading, getPageRequest] = useRequest(
     endpoints.stageProject,
     "GET",
-    false,
+    "",
     () => {}
   );
   const [putTrajectoryRes, putTrajectoryLoading, putTrajectoryRequest] =
     useRequest(
       endpoints.trajectory + trajectory?._id,
       "PUT",
-      true,
+      userToken,
       handleTrajectoryResponse
     );
 

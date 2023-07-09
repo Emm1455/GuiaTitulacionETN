@@ -7,4 +7,5 @@ export const endpoints = {
   login: "login",
   user: "user",
   suggestions: "suggestions",
+  restorePassword: "login/restore-password",
 };

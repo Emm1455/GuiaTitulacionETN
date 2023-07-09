@@ -1,4 +1,4 @@
-import { Box, Typography, TextField, Button, Link } from "@mui/material/";
+import { Box, Typography, TextField, Button, Link, Divider } from "@mui/material/";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import errorAlert from "../alerts/errorAlert";
@@ -13,7 +13,7 @@ function LoginForm() {
   const [resLogin, loadingLogin, sendReqLogin] = useRequest(
     endpoints.login,
     "POST",
-    false,
+    "",
     handleLogin
   );
 
@@ -35,23 +35,14 @@ function LoginForm() {
   };
 
   return (
-    <Box
-      sx={{
-        width: 450,
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+    <
     >
-      <Typography variant="h4">Login</Typography>
+      <Typography variant="h4">Guía de titulación</Typography>
       <TextField
         required
         fullWidth
         id="email"
-        label="Email"
+        label="Correo electrónico"
         variant="outlined"
         size="small"
         value={email}
@@ -63,7 +54,7 @@ function LoginForm() {
         required
         fullWidth
         id="password"
-        label="Password"
+        label="Contraseña"
         variant="outlined"
         size="small"
         type="password"
@@ -79,26 +70,39 @@ function LoginForm() {
         sx={{
           width: "100%",
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection:"column",
+          alignItems:"center",
+          gap:2
         }}
       >
         <Button
           onClick={() => handleSubmit()}
           disabled={loadingLogin === "requesting"}
           variant="contained"
-          sx={{ textTransform: "none", width: 150 }}
+          fullWidth
+          sx={{ textTransform: "none" }}
         >
-          Sign in
+          Iniciar sesión
         </Button>
+        <Button
+          onClick={() => navigate("/restore-password")}
+          disabled={loadingLogin === "requesting"}
+          variant="text"
+          fullWidth
+          disableRipple
+          sx={{ textTransform: "none" }}
+        >
+          Olvidaste tu contraseña?
+        </Button>
+        <Divider flexItem>o</Divider>
         <Typography variant="body2">
           No tienes una cuenta?{" "}
           <Link href="/sign-in" underline="hover">
-            Registrate
+            Registrate aquí
           </Link>
         </Typography>
       </Box>
-    </Box>
+    </>
   );
 }
 

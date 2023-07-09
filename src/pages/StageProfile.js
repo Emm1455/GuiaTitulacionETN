@@ -18,14 +18,14 @@ function StageProfile() {
   const [getPageRes, getPageLoading, getPageRequest] = useRequest(
     endpoints.stageProfile,
     "GET",
-    false,
+    "",
     () => {}
   );
   const [putTrajectoryRes, putTrajectoryLoading, putTrajectoryRequest] =
     useRequest(
       endpoints.trajectory + trajectory?._id,
       "PUT",
-      true,
+      userToken,
       handleTrajectoryResponse
     );
 

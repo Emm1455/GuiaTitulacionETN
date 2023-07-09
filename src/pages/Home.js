@@ -16,7 +16,7 @@ function Home() {
   const [resSug, loadingSug, sendSug] = useRequest(
     endpoints.suggestions,
     "POST",
-    true,
+    userToken,
     handleSug
   );
   const handleClickOpen = () => {

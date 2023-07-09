@@ -1,11 +1,11 @@
-import Box from "@mui/material/Box";
 import SignInForm from "../containers/SignInForm";
+import FormPage from "../containers/FormPage";
 
 function SignIn() {
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
+    <FormPage>
       <SignInForm />
-    </Box>
+    </FormPage>
   );
 }
 
