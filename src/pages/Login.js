@@ -1,12 +1,12 @@
-import Box from '@mui/material/Box';
-import LoginForm from '../containers/LoginForm'
+import LoginForm from "../containers/LoginForm";
+import FormPage from "../containers/FormPage";
 
 function Login() {
   return (
-    <Box sx={{display:'flex', justifyContent:'center', p:2, height:'80vh'}}>
+    <FormPage>
       <LoginForm />
-    </Box>
-  )
+    </FormPage>
+  );
 }
 
-export default Login
+export default Login;

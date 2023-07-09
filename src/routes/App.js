@@ -10,13 +10,16 @@ import SignIn from "../pages/SignIn";
 import PageNotFound from "../pages/PageNotFound";
 import StageProfile from "../pages/StageProfile";
 import StageProject from "../pages/StageProject";
+import RestorePassword from "../pages/RestorePassword";
+import NewPassword from "../pages/NewPassword";
 
 function App() {
   const theme = createTheme({
     palette: {
-      mode: "light",
+      // mode: "light",
       primary: {
         main: blue[900],
+        contrastText: "#fff",
       },
       secondary: {
         main: "#b71c1c",
@@ -34,6 +37,8 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/stage-profile" element={<StageProfile />} />
           <Route path="/stage-project" element={<StageProject />} />
+          <Route path="/restore-password" element={<RestorePassword />} />
+          <Route path="/restore-password/*" element={<NewPassword />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Box>

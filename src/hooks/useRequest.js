@@ -5,7 +5,7 @@ import { URI } from "../api/connectionData";
 export default function useRequest(
   endpoint,
   method,
-  hasToken,
+  token,
   responseHandler
 ) {
   const url = URI + endpoint;
@@ -13,7 +13,7 @@ export default function useRequest(
   const [isLoading, setIsLoading] = useState("");
 
   function sendRequest(data = null) {
-    let config = requestBuilder(method, data, hasToken);
+    let config = requestBuilder(method, data, token);
     setIsLoading("requesting");
     fetchData(url, config)
       .then((res) => {
@@ -27,14 +27,13 @@ export default function useRequest(
   return [response, isLoading, sendRequest];
 }
 
-function requestBuilder(method, data, hasToken) {
-  const userToken = sessionStorage.getItem("token");
+function requestBuilder(method, data, token) {
   let config = {
     method,
     headers: { "Content-Type": "application/json" },
   };
-  if (hasToken) {
-    config.headers = { ...config.headers, "x-token": userToken };
+  if (token !== "") {
+    config.headers = { ...config.headers, "x-token": token };
   }
   if (data != null) {
     config = { ...config, ...{ body: JSON.stringify(data) } };
