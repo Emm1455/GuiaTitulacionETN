@@ -1,7 +1,7 @@
 import React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
+// import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
 function SimpleList({ data }) {
@@ -10,12 +10,11 @@ function SimpleList({ data }) {
 
     return (
       <ListItem key={value.number} disablePadding>
-        <ListItemButton role={undefined} dense disableGutters>
           <ListItemText
             id={labelId}
             primary={`${value.number}. ${value.text}`}
+            primaryTypographyProps={{fontSize:"0.875rem", pt:0.5, pb:0.5}}
           />
-        </ListItemButton>
       </ListItem>
     );
   });

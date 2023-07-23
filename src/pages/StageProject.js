@@ -1,7 +1,8 @@
 import { Button, IconButton, Typography, Snackbar, Alert } from "@mui/material";
 import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+// import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import LinearProgress from '@mui/material/LinearProgress';
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import StepsList from "../components/StepsList";
@@ -42,9 +43,9 @@ function StageProject() {
     setPopUpMessage(true);
   }
 
-  const handleNext = function () {
-    navigate("/stage-project");
-  };
+  // const handleNext = function () {
+  //   navigate("/stage-project");
+  // };
 
   const handlePrevious = function () {
     navigate("/stage-profile");
@@ -91,7 +92,7 @@ function StageProject() {
       )}
       <Typography variant="body2">{getPageRes.notes[0]}</Typography>
       <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
+        sx={{ display: "flex", width: "100%", justifyContent: "flex-start" }}
       >
         <IconButton
           onClick={() => handlePrevious()}
@@ -101,14 +102,14 @@ function StageProject() {
         >
           <ArrowBackIcon />
         </IconButton>
-        <IconButton
+        {/* <IconButton
           onClick={() => handleNext()}
           color="primary"
           aria-label="next"
           component="button"
         >
           <ArrowForwardIcon />
-        </IconButton>
+        </IconButton> */}
       </Box>
       <Snackbar
         open={popUpMessage}
@@ -126,7 +127,9 @@ function StageProject() {
       </Snackbar>
     </Box>
   ) : (
-    <></>
+    <Box sx={{ width: '100%' }}>
+      <LinearProgress />
+    </Box>
   );
 }
 

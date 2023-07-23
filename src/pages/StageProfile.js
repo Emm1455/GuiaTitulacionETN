@@ -1,6 +1,7 @@
 import { Button, IconButton, Typography, Snackbar, Alert } from "@mui/material";
 import Box from "@mui/material/Box";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LinearProgress from '@mui/material/LinearProgress';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -46,9 +47,9 @@ function StageProfile() {
     navigate("/stage-project");
   };
 
-  const handlePrevious = function () {
-    navigate("/stage-project");
-  };
+  // const handlePrevious = function () {
+  //   navigate("/stage-project");
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -90,16 +91,16 @@ function StageProfile() {
       )}
       <Typography variant="body2">{getPageRes?.notes[0]}</Typography>
       <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
+        sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}
       >
-        <IconButton
+        {/* <IconButton
           onClick={() => handlePrevious()}
           color="primary"
           aria-label="next"
           component="button"
         >
           <ArrowBackIcon />
-        </IconButton>
+        </IconButton> */}
         <IconButton
           onClick={() => handleNext()}
           color="primary"
@@ -126,7 +127,9 @@ function StageProfile() {
       </Snackbar>
     </Box>
   ) : (
-    <></>
+    <Box sx={{ width: '100%' }}>
+      <LinearProgress/>
+    </Box>
   );
 }
 
