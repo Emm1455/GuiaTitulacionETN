@@ -1,14 +1,22 @@
-import { Button, IconButton, Typography, Snackbar, Alert } from "@mui/material";
-import Box from "@mui/material/Box";
+import {
+  Button,
+  IconButton,
+  Typography,
+  Snackbar,
+  Alert,
+  Grid,
+  Divider,
+  Box,
+} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 // import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import LinearProgress from '@mui/material/LinearProgress';
+import LinearProgress from "@mui/material/LinearProgress";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import StepsList from "../components/StepsList";
-import SimpleList from "../components/SimpleList";
 import useRequest from "../hooks/useRequest";
 import { endpoints } from "../api/connectionData";
+import Steps from "../containers/Steps";
+import StepsLogged from "../containers/StepsLogged";
 
 function StageProject() {
   const trajectory = JSON.parse(sessionStorage.getItem("project"));
@@ -68,29 +76,59 @@ function StageProject() {
         alignItems: "flex-start",
         flexDirection: "column",
         p: 2,
+        gap: 1,
       }}
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
-      <Typography variant="h6">Requisitos</Typography>
-      <Typography variant="body2">{getPageRes.requirements}</Typography>
-      {userToken ? (
-        <>
-          <StepsList
-            data={getPageRes.data}
-            checked={checked}
-            setChecked={setChecked}
-          />
-          <Button
-            onClick={handleTrajectory}
-            disabled={putTrajectoryLoading === "requesting"}
-          >
-            Registrar avance
-          </Button>
-        </>
-      ) : (
-        <SimpleList data={getPageRes.data} />
-      )}
-      <Typography variant="body2">{getPageRes.notes[0]}</Typography>
+      <Divider flexItem />
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6">Requisitos</Typography>
+            <Typography variant="body2">{getPageRes.requirements}</Typography>
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6">Pasos</Typography>
+            {userToken ? (
+              <>
+                <StepsLogged
+                  data={getPageRes.data}
+                  checked={checked}
+                  setChecked={setChecked}
+                />
+                <Button
+                  onClick={handleTrajectory}
+                  disabled={putTrajectoryLoading === "requesting"}
+                >
+                  Registrar avance
+                </Button>
+              </>
+            ) : (
+              <Steps data={getPageRes.data} />
+            )}
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6">Linea temporal</Typography>
+            {getPageRes.data.map((item) => {
+              return (
+                <Box
+                  key={item.number}
+                  sx={{ display: "flex", justifyContent: "flex-start", gap: 1 }}
+                >
+                  <Typography variant="body2">{item.number}:</Typography>
+                  <Typography variant="body2">{item.duration}</Typography>
+                </Box>
+              );
+            })}
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6">Notas</Typography>
+            <Typography variant="body2">{getPageRes?.notes[0]}</Typography>
+          </Box>
+        </Grid>
+      </Grid>
       <Box
         sx={{ display: "flex", width: "100%", justifyContent: "flex-start" }}
       >
@@ -127,7 +165,7 @@ function StageProject() {
       </Snackbar>
     </Box>
   ) : (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: "100%" }}>
       <LinearProgress />
     </Box>
   );
