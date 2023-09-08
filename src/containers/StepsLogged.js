@@ -22,7 +22,7 @@ function StepsLogged({ data, checked, setChecked }) {
         title={`${value.number}. ${value.text}`}
         type={value.type}
         steps={value.content}
-        areThereSteps={value.content.length > 0}
+        place={value.place}
         handleToggle={() => handleToggle(value.number)}
         isChecked={checked.indexOf(value?.number) !== -1}
       />

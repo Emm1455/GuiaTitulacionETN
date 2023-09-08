@@ -11,15 +11,10 @@ import {
   Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Place from "./Steps/Place";
+import Information from "./Steps/Information";
 
-function StepInfo({
-  title,
-  type,
-  steps,
-  areThereSteps,
-  handleToggle,
-  isChecked,
-}) {
+function StepInfo({ title, type, steps, place, handleToggle, isChecked }) {
   const [expanded, setExpanded] = React.useState(false);
 
   return (
@@ -38,7 +33,7 @@ function StepInfo({
         }
         subheader={<Chip label={type} size="small" />}
         action={
-          areThereSteps ? (
+          steps.length > 0 || place !== "none" ? (
             <IconButton
               aria-label="Show more"
               onClick={() => setExpanded(!expanded)}
@@ -52,14 +47,8 @@ function StepInfo({
       />
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent sx={{ ml: 2 }}>
-          <Typography sx={{ fontWeight: 600 }} variant="body2">
-            Pasos:
-          </Typography>
-          {steps?.map((item) => (
-            <Typography variant="body2" key={item}>
-              - {item}
-            </Typography>
-          ))}
+          {steps.length > 0 ? <Information steps={steps} /> : <></>}
+          {place !== "none" ? <Place place={place} /> : <></>}
         </CardContent>
       </Collapse>
     </Card>

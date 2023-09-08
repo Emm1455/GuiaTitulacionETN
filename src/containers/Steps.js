@@ -9,7 +9,7 @@ function Steps({ data }) {
         title={`${value.number}. ${value.text}`}
         type={value.type}
         steps={value.content}
-        areThereSteps={value.content.length > 0}
+        place={value.place}
       />
     );
   });

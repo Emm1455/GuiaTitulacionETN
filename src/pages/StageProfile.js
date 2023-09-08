@@ -1,26 +1,17 @@
-import {
-  Button,
-  IconButton,
-  Typography,
-  Snackbar,
-  Alert,
-  Divider,
-  Grid,
-  Box,
-} from "@mui/material";
+import { Typography, Snackbar, Alert, Divider, Box } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useRequest from "../hooks/useRequest";
 import { endpoints } from "../api/connectionData";
-import Steps from "../containers/Steps";
-import StepsLogged from "../containers/StepsLogged";
+import StageContent from "../containers/StageContent";
+import NavigationArrows from "../containers/NavigationArrows";
+import { stages } from "../constants/constants";
 
 function StageProfile() {
-  const trajectory = JSON.parse(sessionStorage.getItem("profile"));
+  const currentStage = stages.profile.stage;
+  const trajectory = JSON.parse(sessionStorage.getItem(currentStage));
   const userToken = sessionStorage.getItem("token");
-  const [checked, setChecked] = useState(trajectory ? trajectory.steps : []);
   const [popUpMessage, setPopUpMessage] = useState(false);
   const navigate = useNavigate();
   const [getPageRes, getPageLoading, getPageRequest] = useRequest(
@@ -41,15 +32,15 @@ function StageProfile() {
     getPageRequest();
   }, []);
 
-  function handleTrajectory() {
-    putTrajectoryRequest({ steps: checked });
-  }
-
   function handleTrajectoryResponse(res) {
-    sessionStorage.setItem("profile", JSON.stringify(res.body));
+    sessionStorage.setItem(currentStage, JSON.stringify(res.body));
     setPopUpMessage(true);
   }
-
+  
+  const handlePrevious = function () {
+    navigate("/stage-profile");
+  };
+  
   const handleNext = function () {
     navigate("/stage-project");
   };
@@ -74,64 +65,18 @@ function StageProfile() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">Requisitos</Typography>
-            <Typography variant="body2">{getPageRes.requirements}</Typography>
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">Pasos</Typography>
-            {userToken ? (
-              <>
-                <StepsLogged
-                  data={getPageRes.data}
-                  checked={checked}
-                  setChecked={setChecked}
-                />
-                <Button
-                  onClick={handleTrajectory}
-                  disabled={putTrajectoryLoading === "requesting"}
-                >
-                  Registrar avance
-                </Button>
-              </>
-            ) : (
-              <Steps data={getPageRes.data} />
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">Linea temporal</Typography>
-            {getPageRes.data.map((item) => {
-              return (
-                <Box
-                  key={item.number}
-                  sx={{ display: "flex", justifyContent: "flex-start", gap: 1 }}
-                >
-                  <Typography variant="body2">{item.number}:</Typography>
-                  <Typography variant="body2">{item.duration}</Typography>
-                </Box>
-              );
-            })}
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">Notas</Typography>
-            <Typography variant="body2">{getPageRes?.notes[0]}</Typography>
-          </Box>
-        </Grid>
-      </Grid>
-      <Box sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}>
-        <IconButton
-          onClick={() => handleNext()}
-          color="primary"
-          aria-label="next"
-          component="button"
-        >
-          <ArrowForwardIcon />
-        </IconButton>
-      </Box>
+      <StageContent
+        data={getPageRes}
+        token={userToken}
+        trajectory={trajectory}
+        putTrajectoryLoading={putTrajectoryLoading}
+        putTrajectoryRequest={putTrajectoryRequest}
+      />
+      <NavigationArrows
+        currentPosition={stages.profile.position}
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      />
       <Snackbar
         open={popUpMessage}
         autoHideDuration={2000}
