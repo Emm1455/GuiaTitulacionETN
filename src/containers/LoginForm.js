@@ -24,6 +24,8 @@ function LoginForm() {
       sessionStorage.setItem("rol", res.body.rol);
       sessionStorage.setItem("profile", JSON.stringify(res.body.trajectory[0]));
       sessionStorage.setItem("project", JSON.stringify(res.body.trajectory[1]));
+      sessionStorage.setItem("publicDefense", JSON.stringify(res.body.trajectory[4]));
+      sessionStorage.setItem("graduation", JSON.stringify(res.body.trajectory[6]));
       navigate("/");
     } else {
       errorAlert(`${res.message}: ${res.body.error}`);

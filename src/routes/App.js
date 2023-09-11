@@ -10,6 +10,8 @@ import SignIn from "../pages/SignIn";
 import PageNotFound from "../pages/PageNotFound";
 import StageProfile from "../pages/StageProfile";
 import StageProject from "../pages/StageProject";
+import StagePublicDefense from "../pages/StagePublicDefense";
+import StageGraduation from "../pages/StageGraduation";
 import RestorePassword from "../pages/RestorePassword";
 import NewPassword from "../pages/NewPassword";
 
@@ -37,6 +39,8 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/stage-profile" element={<StageProfile />} />
           <Route path="/stage-project" element={<StageProject />} />
+          <Route path="/stage-public-defense" element={<StagePublicDefense />} />
+          <Route path="/stage-graduation" element={<StageGraduation />} />
           <Route path="/restore-password" element={<RestorePassword />} />
           <Route path="/restore-password/*" element={<NewPassword />} />
           <Route path="*" element={<PageNotFound />} />
