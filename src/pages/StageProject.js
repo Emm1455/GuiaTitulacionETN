@@ -42,7 +42,7 @@ function StageProject() {
   };
 
   const handleNext = function () {
-    navigate("/stage-project");
+    navigate("/stage-public-defense");
   };
 
   const handleClose = (event, reason) => {

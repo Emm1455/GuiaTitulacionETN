@@ -11,6 +11,7 @@ import successAlert from "../alerts/successAlert";
 import errorAlert from "../alerts/errorAlert";
 import { endpoints } from "../api/connectionData";
 import useRequest from "../hooks/useRequest";
+import SearchBox from "./SearchBox";
 
 function LoginForm() {
   const [createDisabled, SetCreateDisabled] = useState(true);
@@ -21,12 +22,20 @@ function LoginForm() {
   const [mention, SetMention] = useState("");
   const [professor, SetProfessor] = useState("");
   const [projectTitle, SetProjectTitle] = useState("");
-  const [tutor, SetTutor] = useState("");
-  const [court, SetCourt] = useState(["", ""]);
+  const [tutor, SetTutor] = useState({title: ""});
+  const [court1, SetCourt1] = useState({title: ""});
+  const [court2, SetCourt2] = useState({title: ""});
   const [passwordError, SetPasswordError] = useState("");
   const [emailError, SetEmailError] = useState("");
   const [validPassword, setValidPassword] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
+
+  const [getPageRes, getPageLoading, getPageRequest] = useRequest(
+    endpoints.professors,
+    "GET",
+    "",
+    () => {}
+  );
 
   const professors = [
     {
@@ -66,24 +75,13 @@ function LoginForm() {
     },
   ];
 
-  const courts = [
-    {
-      value: 0,
-      label: "Jorge León Gomez",
-    },
-    {
-      value: 1,
-      label: "Juan Aguilera Rios",
-    },
-    {
-      value: 2,
-      label: "Balderrama",
-    },
-    {
-      value: 3,
-      label: "Quiroga",
-    },
-  ];
+  let courts = [];
+
+  if(getPageLoading === 'requested'){
+    courts = getPageRes.map((value) => {
+      return {title: value.name, id: value._id}
+    });
+  }
 
   const navigate = useNavigate();
 
@@ -116,7 +114,7 @@ function LoginForm() {
       tutor: tutor,
       projectTitle: projectTitle,
       mention: mention,
-      courts: court,
+      courts: [court1.title, court2.title],
       password: password,
     };
 
@@ -128,12 +126,6 @@ function LoginForm() {
     const lastNameArray = lastName.split(" ");
     const nameLetters = nameArray.map((item) => item[0].toLowerCase()).join("");
     return nameLetters + lastNameArray[0].toLowerCase();
-  }
-
-  function handleCourt(value, option) {
-    SetCourt(
-      court.map((item, index) => (index === option ? (item = value) : item))
-    );
   }
 
   useEffect(() => {
@@ -148,6 +140,10 @@ function LoginForm() {
       SetCreateDisabled(false);
     else SetCreateDisabled(true);
   }, [name, lastName, professor, mention, validPassword, validEmail]);
+
+  useEffect(() => {
+    getPageRequest();
+  },[]);
 
   function handlePassword(event) {
     const value = event.target.value;
@@ -186,8 +182,7 @@ function LoginForm() {
   }
 
   return (
-    <
-    >
+    <>
       <Typography variant="h6" sx={{ alignSelf: "flex-start" }}>
         Datos personales
       </Typography>
@@ -313,17 +308,12 @@ function LoginForm() {
           SetProjectTitle(e.target.value);
         }}
       />
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        id="tutor"
-        label="Tutor"
-        value={tutor}
-        onChange={(e) => {
-          SetTutor(e.target.value);
-        }}
-      />
+      <SearchBox
+          value={tutor}
+          setValue={SetTutor}
+          label={"Tutor"}
+          data={courts}
+        />
       <Box
         sx={{
           width: "100%",
@@ -333,42 +323,18 @@ function LoginForm() {
           alignItems: "center",
         }}
       >
-        <TextField
-          select
-          fullWidth
-          variant="outlined"
-          size="small"
-          id="court1"
-          label="Tribunal 1"
-          value={court[0]}
-          onChange={(e) => {
-            handleCourt(e.target.value, 0);
-          }}
-        >
-          {courts.map((option) => (
-            <MenuItem key={option.value} value={option.label}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          select
-          fullWidth
-          variant="outlined"
-          size="small"
-          id="court2"
-          label="Tribunal 2"
-          value={court[1]}
-          onChange={(e) => {
-            handleCourt(e.target.value, 1);
-          }}
-        >
-          {courts.map((option) => (
-            <MenuItem key={option.value} value={option.label}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
+        <SearchBox
+          value={court1}
+          setValue={SetCourt1}
+          label={"Tribunal 1"}
+          data={courts}
+        />
+        <SearchBox
+          value={court2}
+          setValue={SetCourt2}
+          label={"Tribunal 2"}
+          data={courts}
+        />
       </Box>
       <Box
         sx={{

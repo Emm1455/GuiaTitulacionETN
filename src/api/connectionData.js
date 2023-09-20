@@ -10,4 +10,5 @@ export const endpoints = {
   user: "user",
   suggestions: "suggestions",
   restorePassword: "login/restore-password",
+  professors: "professor",
 };
