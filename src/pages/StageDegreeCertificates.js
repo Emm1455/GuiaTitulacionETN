@@ -7,16 +7,15 @@ import { endpoints } from "../api/connectionData";
 import StageContent from "../containers/StageContent";
 import NavigationArrows from "../containers/NavigationArrows";
 import { stages } from "../constants/constants";
-import SubStagesTimeLine from "../containers/SubStagesTimeLine";
 
-function StagePublicDefense() {
-  const currentStage = stages.publicDefense;
+function StageDegreeCertificates() {
+  const currentStage = stages.degreeCertificates;
   const trajectory = JSON.parse(sessionStorage.getItem(currentStage.stage));
   const userToken = sessionStorage.getItem("token");
   const [popUpMessage, setPopUpMessage] = useState(false);
   const navigate = useNavigate();
   const [getPageRes, getPageLoading, getPageRequest] = useRequest(
-    endpoints.stagePublicDefense,
+    endpoints.stageDegreeCertificates,
     "GET",
     "",
     () => {}
@@ -37,20 +36,19 @@ function StagePublicDefense() {
     sessionStorage.setItem(currentStage.stage, JSON.stringify(res.body));
     setPopUpMessage(true);
   }
-
+  
   const handlePrevious = function () {
-    navigate("/stage-project");
+    navigate("/stage-public-defense");
   };
-
+  
   const handleNext = function () {
-    navigate("/stage-graduation");
+    navigate("/stage-studies-conclusion");
   };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setPopUpMessage(false);
   };
 
@@ -58,7 +56,6 @@ function StagePublicDefense() {
     <Box
       sx={{
         display: "flex",
-        height: "80vh",
         justifyContent: "flex-start",
         alignItems: "flex-start",
         flexDirection: "column",
@@ -68,8 +65,6 @@ function StagePublicDefense() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
-      <Typography variant="h6">Sub etapas</Typography>
-      <SubStagesTimeLine/>
       <StageContent
         data={getPageRes}
         token={userToken}
@@ -84,8 +79,9 @@ function StagePublicDefense() {
       />
       <Snackbar
         open={popUpMessage}
-        autoHideDuration={2500}
+        autoHideDuration={2000}
         onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
           onClose={handleClose}
@@ -104,4 +100,4 @@ function StagePublicDefense() {
   );
 }
 
-export default StagePublicDefense
+export default StageDegreeCertificates

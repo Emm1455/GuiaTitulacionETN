@@ -14,12 +14,18 @@ import Information from "./Steps/Information";
 
 function StepInfo({ title, type, steps, place }) {
   const [expanded, setExpanded] = React.useState(false);
-
+  // Object literal use
+  const chipColors = {
+    "Académico": "primary.light",
+    "Compra": "success.light",
+    "Trámite": "warning.light",
+    "Personal": "error.light",
+  };
   return (
     <Card elevation={0}>
       <CardHeader
         title={<Typography variant="body2">{title}</Typography>}
-        subheader={<Chip label={type} size="small" />}
+        subheader={<Chip sx={{backgroundColor: chipColors[type]}} label={type} size="small" />}
         action={
           steps.length > 0 || place !== "none" ? (
             <IconButton

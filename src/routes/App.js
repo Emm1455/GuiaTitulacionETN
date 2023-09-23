@@ -12,6 +12,8 @@ import StageProfile from "../pages/StageProfile";
 import StageProject from "../pages/StageProject";
 import StagePublicDefense from "../pages/StagePublicDefense";
 import StageGraduation from "../pages/StageGraduation";
+import StageDegreeCertificates from "../pages/StageDegreeCertificates";
+import StageStudiesConclusion from "../pages/StageStudiesConclusion";
 import RestorePassword from "../pages/RestorePassword";
 import NewPassword from "../pages/NewPassword";
 
@@ -27,6 +29,9 @@ function App() {
         main: "#b71c1c",
       },
     },
+    components:{
+      
+    }
   });
   return (
     <ThemeProvider theme={theme}>
@@ -41,6 +46,8 @@ function App() {
           <Route path="/stage-project" element={<StageProject />} />
           <Route path="/stage-public-defense" element={<StagePublicDefense />} />
           <Route path="/stage-graduation" element={<StageGraduation />} />
+          <Route path="/stage-degree-certificates" element={<StageDegreeCertificates />} />
+          <Route path="/stage-studies-conclusion" element={<StageStudiesConclusion />} />
           <Route path="/restore-password" element={<RestorePassword />} />
           <Route path="/restore-password/*" element={<NewPassword />} />
           <Route path="*" element={<PageNotFound />} />

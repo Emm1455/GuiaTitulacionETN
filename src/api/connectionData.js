@@ -5,6 +5,8 @@ export const endpoints = {
   stageProject: "stage?name=proyecto_de_grado",
   stagePublicDefense: "stage?name=defensa_publica",
   stageGraduation: "stage?name=titulación",
+  stageDegreeCertificates: "stage?name=certificado_calificaciones",
+  stageStudiesConclusion: "stage?name=certificado_conclusion_estudios",
   trajectory: "user/trajectory/",
   login: "login",
   user: "user",
