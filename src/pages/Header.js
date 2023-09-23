@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import MeblasoftIcon from "../assets/meblasoft.svg";
 
 function Header() {
   const userName = sessionStorage.getItem("name");
@@ -13,7 +14,7 @@ function Header() {
       sx={{
         display: "flex",
         backgroundColor: "primary.light",
-        justifyContent: "flex-end",
+        justifyContent: "space-between",
         alignItems: "center",
         color: "primary.contrastText",
         gap: 2,
@@ -21,58 +22,70 @@ function Header() {
       }}
     >
       <Button
-        onClick={() => navigate("/")}
+        href="https://www.facebook.com/profile.php?id=61550931070154"
         sx={{
-          textTransform: "none",
-          color: "inherit",
+          display: "flex",
+          alignItems: "center",
+          ml: 1
         }}
       >
-        Home
+        <img src={MeblasoftIcon} alt="project icon" height="40" width="40" />
       </Button>
-      {userName ? (
-        <Box
+      <Box sx={{ display: "flex" }}>
+        <Button
+          onClick={() => navigate("/")}
           sx={{
-            display: "flex",
-            alignItems: "center",
+            textTransform: "none",
+            color: "inherit",
           }}
         >
-          <Typography variant="body2">{userName}</Typography>
-          <Button
-            onClick={() => cerrarSesión()}
-            sx={{ textTransform: "none", color: "inherit" }}
-          >
-            (Cerrar Sesión)
-          </Button>
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-          }}
-        >
-          <Button
-            onClick={() => navigate("/login")}
-            color="info"
+          Inicio
+        </Button>
+        {userName ? (
+          <Box
             sx={{
-              textTransform: "none",
+              display: "flex",
+              alignItems: "center",
             }}
-            variant="contained"
           >
-            Log in
-          </Button>
-          <Button
-            onClick={() => navigate("/sign-in")}
-            color="success"
+            <Typography variant="body2">{userName}</Typography>
+            <Button
+              onClick={() => cerrarSesión()}
+              sx={{ textTransform: "none", color: "inherit" }}
+            >
+              (Cerrar Sesión)
+            </Button>
+          </Box>
+        ) : (
+          <Box
             sx={{
-              textTransform: "none",
+              display: "flex",
+              gap: 2,
             }}
-            variant="contained"
           >
-            Sign in
-          </Button>
-        </Box>
-      )}
+            <Button
+              onClick={() => navigate("/login")}
+              color="info"
+              sx={{
+                textTransform: "none",
+              }}
+              variant="contained"
+            >
+              Ingresar
+            </Button>
+            <Button
+              onClick={() => navigate("/sign-in")}
+              color="success"
+              sx={{
+                textTransform: "none",
+              }}
+              variant="contained"
+            >
+              Registrarse
+            </Button>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 }
