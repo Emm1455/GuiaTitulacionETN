@@ -7,6 +7,7 @@ export const endpoints = {
   stageGraduation: "stage?name=titulación",
   stageDegreeCertificates: "stage?name=certificado_calificaciones",
   stageStudiesConclusion: "stage?name=certificado_conclusion_estudios",
+  stageSenapi: "stage?name=tramite_senapi",
   trajectory: "user/trajectory/",
   login: "login",
   user: "user",

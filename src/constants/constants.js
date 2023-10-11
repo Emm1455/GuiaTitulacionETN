@@ -4,8 +4,9 @@ export const stages = {
   publicDefense: {stage:"publicDefense", position: 3},
   degreeCertificates: {stage: "degreeCertificates", position: 4},
   studiesConclusion: {stage: "studiesConclusion", position: 5},
-  graduation: {stage:"graduation", position: 6},
+  senapi: {stage:"senapi", position: 6},
+  graduation: {stage:"graduation", position: 7},
 };
 
 // This should be updated manually
-export const stagesQuantity = 6;
+export const stagesQuantity = 7;

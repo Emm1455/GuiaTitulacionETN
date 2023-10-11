@@ -7,18 +7,15 @@ import { endpoints } from "../api/connectionData";
 import StageContent from "../containers/StageContent";
 import NavigationArrows from "../containers/NavigationArrows";
 import { stages } from "../constants/constants";
-import SubStagesTimeLine from "../containers/SubStagesTimeLine";
-import DegreeCertificates from "../assets/degree-certificates.svg"
-import StudiesConclusion from "../assets/studies-conclusion.svg";
 
-function StagePublicDefense() {
-  const currentStage = stages.publicDefense;
+function StageSenapi() {
+  const currentStage = stages.senapi;
   const trajectory = JSON.parse(sessionStorage.getItem(currentStage.stage));
   const userToken = sessionStorage.getItem("token");
   const [popUpMessage, setPopUpMessage] = useState(false);
   const navigate = useNavigate();
   const [getPageRes, getPageLoading, getPageRequest] = useRequest(
-    endpoints.stagePublicDefense,
+    endpoints.stageSenapi,
     "GET",
     "",
     () => {}
@@ -39,11 +36,11 @@ function StagePublicDefense() {
     sessionStorage.setItem(currentStage.stage, JSON.stringify(res.body));
     setPopUpMessage(true);
   }
-
+  
   const handlePrevious = function () {
-    navigate("/stage-project");
+    navigate("/stage-graduation");
   };
-
+  
   const handleNext = function () {
     navigate("/stage-graduation");
   };
@@ -52,25 +49,13 @@ function StagePublicDefense() {
     if (reason === "clickaway") {
       return;
     }
-
     setPopUpMessage(false);
   };
-
-  const SubStages = [{
-    path: "/stage-degree-certificates",
-    icon: DegreeCertificates,
-    label: "Certificado de calificaciones"
-  },{
-    path: "/stage-studies-conclusion",
-    icon: StudiesConclusion,
-    label: "Certificado de conclusión de estudios"
-  }];
 
   return getPageLoading === "requested" ? (
     <Box
       sx={{
         display: "flex",
-        height: "80vh",
         justifyContent: "flex-start",
         alignItems: "flex-start",
         flexDirection: "column",
@@ -80,10 +65,6 @@ function StagePublicDefense() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
-      <Typography variant="h6">Sub etapas</Typography>
-      <SubStagesTimeLine
-        items={SubStages}
-      />
       <StageContent
         data={getPageRes}
         token={userToken}
@@ -98,8 +79,9 @@ function StagePublicDefense() {
       />
       <Snackbar
         open={popUpMessage}
-        autoHideDuration={2500}
+        autoHideDuration={2000}
         onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
           onClose={handleClose}
@@ -118,4 +100,4 @@ function StagePublicDefense() {
   );
 }
 
-export default StagePublicDefense
+export default StageSenapi

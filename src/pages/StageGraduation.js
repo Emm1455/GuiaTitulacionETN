@@ -7,6 +7,8 @@ import { endpoints } from "../api/connectionData";
 import StageContent from "../containers/StageContent";
 import NavigationArrows from "../containers/NavigationArrows";
 import { stages } from "../constants/constants";
+import SubStagesTimeLine from "../containers/SubStagesTimeLine";
+import Senapi from "../assets/senapi.svg";
 
 function StageGraduation() {
   const currentStage = stages.graduation;
@@ -53,6 +55,12 @@ function StageGraduation() {
     setPopUpMessage(false);
   };
 
+  const SubStages = [{
+    path: "/stage-senapi",
+    icon: Senapi,
+    label: "Trámite de registro en Senapi"
+  }];
+
   return getPageLoading === "requested" ? (
     <Box
       sx={{
@@ -67,6 +75,10 @@ function StageGraduation() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
+      <Typography variant="h6">Sub etapas</Typography>
+      <SubStagesTimeLine
+        items={SubStages}
+      />
       <StageContent
         data={getPageRes}
         token={userToken}

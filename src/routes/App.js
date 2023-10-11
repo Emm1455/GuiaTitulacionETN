@@ -14,6 +14,7 @@ import StagePublicDefense from "../pages/StagePublicDefense";
 import StageGraduation from "../pages/StageGraduation";
 import StageDegreeCertificates from "../pages/StageDegreeCertificates";
 import StageStudiesConclusion from "../pages/StageStudiesConclusion";
+import StageSenapi from "../pages/StageSenapi";
 import RestorePassword from "../pages/RestorePassword";
 import NewPassword from "../pages/NewPassword";
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/stage-graduation" element={<StageGraduation />} />
           <Route path="/stage-degree-certificates" element={<StageDegreeCertificates />} />
           <Route path="/stage-studies-conclusion" element={<StageStudiesConclusion />} />
+          <Route path="/stage-senapi" element={<StageSenapi />} />
           <Route path="/restore-password" element={<RestorePassword />} />
           <Route path="/restore-password/*" element={<NewPassword />} />
           <Route path="*" element={<PageNotFound />} />
