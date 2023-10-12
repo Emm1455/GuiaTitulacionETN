@@ -42,8 +42,10 @@ function StageSenapi() {
   };
   
   const handleNext = function () {
-    navigate("/stage-graduation");
+    navigate("/");
   };
+
+  const ArrowLabels = ["Titulación",""];
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -65,17 +67,17 @@ function StageSenapi() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
+      <NavigationArrows
+        labels={ArrowLabels}
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      />
       <StageContent
         data={getPageRes}
         token={userToken}
         trajectory={trajectory}
         putTrajectoryLoading={putTrajectoryLoading}
         putTrajectoryRequest={putTrajectoryRequest}
-      />
-      <NavigationArrows
-        currentPosition={currentStage.position}
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
       />
       <Snackbar
         open={popUpMessage}

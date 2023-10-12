@@ -36,15 +36,17 @@ function StageProfile() {
     sessionStorage.setItem(currentStage, JSON.stringify(res.body));
     setPopUpMessage(true);
   }
-  
+
   const handlePrevious = function () {
-    navigate("/stage-profile");
+    navigate("/");
   };
-  
+
   const handleNext = function () {
     navigate("/stage-project");
   };
 
+  const ArrowLabels = ["","Proyecto de grado"];
+  
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -65,17 +67,17 @@ function StageProfile() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
+      <NavigationArrows
+        labels={ArrowLabels}
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      />
       <StageContent
         data={getPageRes}
         token={userToken}
         trajectory={trajectory}
         putTrajectoryLoading={putTrajectoryLoading}
         putTrajectoryRequest={putTrajectoryRequest}
-      />
-      <NavigationArrows
-        currentPosition={stages.profile.position}
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
       />
       <Snackbar
         open={popUpMessage}

@@ -45,6 +45,8 @@ function StageDegreeCertificates() {
     navigate("/stage-studies-conclusion");
   };
 
+  const ArrowLabels = ["Defensa pública","Conclusión de estudios"];
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -65,17 +67,17 @@ function StageDegreeCertificates() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
+      <NavigationArrows
+        labels={ArrowLabels}
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      />
       <StageContent
         data={getPageRes}
         token={userToken}
         trajectory={trajectory}
         putTrajectoryLoading={putTrajectoryLoading}
         putTrajectoryRequest={putTrajectoryRequest}
-      />
-      <NavigationArrows
-        currentPosition={currentStage.position}
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
       />
       <Snackbar
         open={popUpMessage}

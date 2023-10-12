@@ -1,35 +1,39 @@
 import React from "react";
-import { Box, IconButton } from "@mui/material";
-import { stagesQuantity } from "../constants/constants";
+import { Box, Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-function NavigationArrows({ currentPosition, handlePrevious, handleNext }) {
+function NavigationArrows({ labels, handlePrevious, handleNext }) {
   let distribution = "space-between";
-  if(currentPosition === 1) distribution = "flex-end";
+  if(labels[0] === ""){distribution = "flex-end";}
+  if(labels[1] === ""){distribution = "flex-start";}
   return (
     <Box sx={{ display: "flex", width: "100%", justifyContent: distribution }}>
-      {currentPosition > 1 ? (
-        <IconButton
+      {labels[0] !== "" ? (
+        <Button
           onClick={() => handlePrevious()}
           color="primary"
           aria-label="next"
-          component="button"
+          variant = "outlined"
+          startIcon = {<ArrowBackIcon />}
+          sx={{ textTransform: "none", lineHeight: 1.2}}
         >
-          <ArrowBackIcon />
-        </IconButton>
+          {labels[0]}
+        </Button>
       ) : (
         <></>
       )}
-      {currentPosition < stagesQuantity ? (
-        <IconButton
+      {labels[1] !== "" ? (
+        <Button
           onClick={() => handleNext()}
           color="primary"
           aria-label="next"
-          component="button"
+          variant = "outlined"
+          endIcon = {<ArrowForwardIcon />}
+          sx={{ textTransform: "none", lineHeight: 1.2 }}
         >
-          <ArrowForwardIcon />
-        </IconButton>
+          {labels[1]}
+        </Button>
       ) : (
         <></>
       )}

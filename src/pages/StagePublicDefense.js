@@ -48,6 +48,8 @@ function StagePublicDefense() {
     navigate("/stage-graduation");
   };
 
+  const ArrowLabels = ["Proyecto de grado","Titulación"];
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -80,6 +82,11 @@ function StagePublicDefense() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
+      <NavigationArrows
+        labels={ArrowLabels}
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      />
       <Typography variant="h6">Sub etapas</Typography>
       <SubStagesTimeLine
         items={SubStages}
@@ -90,11 +97,6 @@ function StagePublicDefense() {
         trajectory={trajectory}
         putTrajectoryLoading={putTrajectoryLoading}
         putTrajectoryRequest={putTrajectoryRequest}
-      />
-      <NavigationArrows
-        currentPosition={currentStage.position}
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
       />
       <Snackbar
         open={popUpMessage}

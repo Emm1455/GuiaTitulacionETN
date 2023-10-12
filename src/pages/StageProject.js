@@ -45,6 +45,8 @@ function StageProject() {
     navigate("/stage-public-defense");
   };
 
+  const ArrowLabels = ["Preparación de perfil","Defensa Pública"];
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -67,17 +69,17 @@ function StageProject() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
+      <NavigationArrows
+        labels={ArrowLabels}
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      />
       <StageContent
         data={getPageRes}
         token={userToken}
         trajectory={trajectory}
         putTrajectoryLoading={putTrajectoryLoading}
         putTrajectoryRequest={putTrajectoryRequest}
-      />
-      <NavigationArrows
-        currentPosition={currentStage.position}
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
       />
       <Snackbar
         open={popUpMessage}

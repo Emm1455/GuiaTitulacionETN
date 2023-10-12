@@ -44,8 +44,10 @@ function StageGraduation() {
   };
 
   const handleNext = function () {
-    navigate("/stage-profile");
+    navigate("/");
   };
+
+  const ArrowLabels = ["Defensa pública",""];
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -75,6 +77,11 @@ function StageGraduation() {
     >
       <Typography variant="h4">{getPageRes.title}</Typography>
       <Divider flexItem />
+      <NavigationArrows
+        labels={ArrowLabels}
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      />
       <Typography variant="h6">Sub etapas</Typography>
       <SubStagesTimeLine
         items={SubStages}
@@ -86,11 +93,7 @@ function StageGraduation() {
         putTrajectoryLoading={putTrajectoryLoading}
         putTrajectoryRequest={putTrajectoryRequest}
       />
-      <NavigationArrows
-        currentPosition={currentStage.position}
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
-      />
+      
       <Snackbar
         open={popUpMessage}
         autoHideDuration={2500}
