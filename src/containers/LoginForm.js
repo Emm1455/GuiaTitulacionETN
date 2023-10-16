@@ -24,7 +24,10 @@ function LoginForm() {
       sessionStorage.setItem("rol", res.body.rol);
       sessionStorage.setItem("profile", JSON.stringify(res.body.trajectory[0]));
       sessionStorage.setItem("project", JSON.stringify(res.body.trajectory[1]));
+      sessionStorage.setItem("degreeCertificates", JSON.stringify(res.body.trajectory[2]));
+      sessionStorage.setItem("studiesConclusion", JSON.stringify(res.body.trajectory[3]));
       sessionStorage.setItem("publicDefense", JSON.stringify(res.body.trajectory[4]));
+      sessionStorage.setItem("senapi", JSON.stringify(res.body.trajectory[5]));
       sessionStorage.setItem("graduation", JSON.stringify(res.body.trajectory[6]));
       navigate("/");
     } else {

@@ -31,7 +31,7 @@ function Header() {
       >
         <img src={MeblasoftIcon} alt="project icon" height="40" width="40" />
       </Button>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", gap: 2 }}>
         <Button
           onClick={() => navigate("/")}
           sx={{
